@@ -3,6 +3,7 @@
 [![Tests](https://github.com/philiprehberger/kt-safe-json/actions/workflows/publish.yml/badge.svg)](https://github.com/philiprehberger/kt-safe-json/actions/workflows/publish.yml)
 [![Maven Central](https://img.shields.io/maven-central/v/com.philiprehberger/safe-json.svg)](https://central.sonatype.com/artifact/com.philiprehberger/safe-json)
 [![License](https://img.shields.io/github/license/philiprehberger/kt-safe-json)](LICENSE)
+[![Sponsor](https://img.shields.io/badge/sponsor-GitHub%20Sponsors-ec6cb9)](https://github.com/sponsors/philiprehberger)
 
 Non-throwing JSON parsing with typed errors and path-based navigation.
 
