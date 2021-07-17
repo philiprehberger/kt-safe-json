@@ -174,6 +174,84 @@ public class JsonNode(public val element: JsonElement) {
     }
 
     /**
+     * Checks whether a path exists in this JSON structure.
+     *
+     * @param path dot-notation path
+     * @return true if the path exists, false otherwise
+     */
+    public fun exists(path: String): Boolean {
+        return navigate(path) is Result.Ok
+    }
+
+    /**
+     * Navigates to the element at the given path and returns it as a list of [JsonNode]s.
+     *
+     * @param path dot-notation path to an array element
+     * @return [Result.Ok] with a list of [JsonNode]s, or a [JsonError] on failure
+     */
+    public fun array(path: String): Result<List<JsonNode>, JsonError> {
+        return navigate(path).let { result ->
+            when (result) {
+                is Result.Err -> result
+                is Result.Ok -> {
+                    val el = result.value
+                    if (el is JsonArray) {
+                        Result.Ok(el.map { JsonNode(it) })
+                    } else {
+                        Result.Err(JsonError.TypeMismatch(path, "Array", describeType(el)))
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Returns the keys of the JSON object at the given path.
+     *
+     * @param path dot-notation path to an object element
+     * @return [Result.Ok] with the set of keys, or a [JsonError] on failure
+     */
+    public fun keys(path: String): Result<Set<String>, JsonError> {
+        return navigate(path).let { result ->
+            when (result) {
+                is Result.Err -> result
+                is Result.Ok -> {
+                    val el = result.value
+                    if (el is JsonObject) {
+                        Result.Ok(el.keys)
+                    } else {
+                        Result.Err(JsonError.TypeMismatch(path, "Object", describeType(el)))
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Returns the number of elements at the given path.
+     *
+     * For arrays, returns the number of elements. For objects, returns the number of keys.
+     *
+     * @param path dot-notation path
+     * @return [Result.Ok] with the size, or a [JsonError] on failure
+     */
+    public fun size(path: String): Result<Int, JsonError> {
+        return navigate(path).let { result ->
+            when (result) {
+                is Result.Err -> result
+                is Result.Ok -> {
+                    val el = result.value
+                    when (el) {
+                        is JsonArray -> Result.Ok(el.size)
+                        is JsonObject -> Result.Ok(el.size)
+                        else -> Result.Err(JsonError.TypeMismatch(path, "Array or Object", describeType(el)))
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * Navigates the JSON tree to the element at the given [path].
      *
      * @param path dot-notation path with optional array indices
