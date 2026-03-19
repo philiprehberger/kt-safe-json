@@ -11,7 +11,7 @@ import kotlinx.serialization.json.Json
  * @param input the JSON string to parse
  * @return a [Result] containing either a [JsonNode] or a [JsonError]
  */
-fun safeParseJson(input: String): Result<JsonNode, JsonError> {
+public fun safeParseJson(input: String): Result<JsonNode, JsonError> {
     return try {
         val element = Json.parseToJsonElement(input)
         Result.Ok(JsonNode(element))

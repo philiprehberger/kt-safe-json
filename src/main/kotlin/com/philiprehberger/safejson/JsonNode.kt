@@ -10,7 +10,7 @@ import kotlinx.serialization.json.*
  *
  * @property element the underlying [JsonElement]
  */
-class JsonNode(val element: JsonElement) {
+public class JsonNode(public val element: JsonElement) {
 
     /**
      * Navigates to the element at the given path and extracts it as a [String].
@@ -18,7 +18,7 @@ class JsonNode(val element: JsonElement) {
      * @param path dot-notation path (e.g. `"user.name"`, `"items[0].title"`)
      * @return [Result.Ok] with the string value, or a [JsonError] on failure
      */
-    fun string(path: String): Result<String, JsonError> {
+    public fun string(path: String): Result<String, JsonError> {
         return navigate(path).let { result ->
             when (result) {
                 is Result.Err -> result
@@ -42,7 +42,7 @@ class JsonNode(val element: JsonElement) {
      * @param path dot-notation path
      * @return [Result.Ok] with the int value, or a [JsonError] on failure
      */
-    fun int(path: String): Result<Int, JsonError> {
+    public fun int(path: String): Result<Int, JsonError> {
         return navigate(path).let { result ->
             when (result) {
                 is Result.Err -> result
@@ -69,7 +69,7 @@ class JsonNode(val element: JsonElement) {
      * @param path dot-notation path
      * @return [Result.Ok] with the long value, or a [JsonError] on failure
      */
-    fun long(path: String): Result<Long, JsonError> {
+    public fun long(path: String): Result<Long, JsonError> {
         return navigate(path).let { result ->
             when (result) {
                 is Result.Err -> result
@@ -96,7 +96,7 @@ class JsonNode(val element: JsonElement) {
      * @param path dot-notation path
      * @return [Result.Ok] with the boolean value, or a [JsonError] on failure
      */
-    fun boolean(path: String): Result<Boolean, JsonError> {
+    public fun boolean(path: String): Result<Boolean, JsonError> {
         return navigate(path).let { result ->
             when (result) {
                 is Result.Err -> result
@@ -123,7 +123,7 @@ class JsonNode(val element: JsonElement) {
      * @param path dot-notation path
      * @return [Result.Ok] with the double value, or a [JsonError] on failure
      */
-    fun double(path: String): Result<Double, JsonError> {
+    public fun double(path: String): Result<Double, JsonError> {
         return navigate(path).let { result ->
             when (result) {
                 is Result.Err -> result
@@ -152,7 +152,7 @@ class JsonNode(val element: JsonElement) {
      * @param default the fallback value
      * @return the string value at [path], or [default]
      */
-    fun stringOrDefault(path: String, default: String): String {
+    public fun stringOrDefault(path: String, default: String): String {
         return when (val result = string(path)) {
             is Result.Ok -> result.value
             is Result.Err -> default
@@ -166,7 +166,7 @@ class JsonNode(val element: JsonElement) {
      * @param path dot-notation path
      * @return the int value at [path], or `null`
      */
-    fun intOrNull(path: String): Int? {
+    public fun intOrNull(path: String): Int? {
         return when (val result = int(path)) {
             is Result.Ok -> result.value
             is Result.Err -> null
