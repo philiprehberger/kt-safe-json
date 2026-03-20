@@ -1,5 +1,9 @@
 # safe-json
 
+[![Tests](https://github.com/philiprehberger/kt-safe-json/actions/workflows/publish.yml/badge.svg)](https://github.com/philiprehberger/kt-safe-json/actions/workflows/publish.yml)
+[![Maven Central](https://img.shields.io/maven-central/v/com.philiprehberger/safe-json.svg)](https://central.sonatype.com/artifact/com.philiprehberger/safe-json)
+[![License](https://img.shields.io/github/license/philiprehberger/kt-safe-json)](LICENSE)
+
 Non-throwing JSON parsing with typed errors and path-based navigation.
 
 ## Installation
@@ -60,6 +64,13 @@ when (val result = safeParseJson(json)) {
 | `JsonError.ParseError` | Malformed JSON input |
 | `JsonError.PathNotFound` | Path does not exist in document |
 | `JsonError.TypeMismatch` | Value at path is not the expected type |
+
+## Development
+
+```bash
+./gradlew build
+./gradlew test
+```
 
 ## License
 
