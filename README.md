@@ -11,7 +11,7 @@ Non-throwing JSON parsing with typed errors and path-based navigation.
 ### Gradle Kotlin DSL
 
 ```kotlin
-implementation("com.philiprehberger:safe-json:0.1.0")
+implementation("com.philiprehberger:safe-json:0.1.4")
 ```
 
 ### Maven
@@ -20,7 +20,7 @@ implementation("com.philiprehberger:safe-json:0.1.0")
 <dependency>
     <groupId>com.philiprehberger</groupId>
     <artifactId>safe-json</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.4</version>
 </dependency>
 ```
 
