@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.0 (2026-03-31)
+
+- Add `exists()` to check if a path exists without extracting a value
+- Add `array()` to get array elements as a list of `JsonNode`s
+- Add `keys()` to list all keys of a JSON object at a path
+- Add `size()` to get the element count of arrays or objects
+
 ## 0.1.6 (2026-03-31)
 
 - Standardize README to 3-badge format with emoji Support section

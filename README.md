@@ -11,7 +11,7 @@ Non-throwing JSON parsing with typed errors and path-based navigation.
 ### Gradle Kotlin DSL
 
 ```kotlin
-implementation("com.philiprehberger:safe-json:0.1.5")
+implementation("com.philiprehberger:safe-json:0.2.0")
 ```
 
 ### Maven
@@ -20,7 +20,7 @@ implementation("com.philiprehberger:safe-json:0.1.5")
 <dependency>
     <groupId>com.philiprehberger</groupId>
     <artifactId>safe-json</artifactId>
-    <version>0.1.5</version>
+    <version>0.2.0</version>
 </dependency>
 ```
 
@@ -49,6 +49,33 @@ when (val result = safeParseJson(json)) {
 }
 ```
 
+### Path Existence Check
+
+```kotlin
+if (node.exists("user.email")) {
+    val email = node.string("user.email")
+}
+```
+
+### Array Access
+
+```kotlin
+val items = node.array("items")
+when (items) {
+    is Result.Ok -> items.value.forEach { item ->
+        println(item.string("name"))
+    }
+    is Result.Err -> println("Not an array")
+}
+```
+
+### Object Keys and Size
+
+```kotlin
+val keys = node.keys("user")     // Ok(setOf("name", "age"))
+val size = node.size("items")    // Ok(5) for arrays, Ok(3) for objects
+```
+
 ## API
 
 | Function / Class | Description |
@@ -61,6 +88,10 @@ when (val result = safeParseJson(json)) {
 | `JsonNode.double(path)` | Extracts double at path |
 | `JsonNode.stringOrDefault(path, default)` | Returns string or default if missing/wrong type |
 | `JsonNode.intOrNull(path)` | Returns int or null if missing/wrong type |
+| `JsonNode.exists(path)` | Check if a path exists |
+| `JsonNode.array(path)` | Get array elements as List of JsonNodes |
+| `JsonNode.keys(path)` | Get object keys at path |
+| `JsonNode.size(path)` | Get element count at path |
 | `JsonError.ParseError` | Malformed JSON input |
 | `JsonError.PathNotFound` | Path does not exist in document |
 | `JsonError.TypeMismatch` | Value at path is not the expected type |

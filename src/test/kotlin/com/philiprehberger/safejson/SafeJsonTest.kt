@@ -2,6 +2,7 @@ package com.philiprehberger.safejson
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -161,5 +162,89 @@ class SafeJsonTest {
         val node = (safeParseJson(json) as Result.Ok).value
         assertEquals(20, (node.int("data.users[1].id") as Result.Ok).value)
         assertEquals("admin", (node.string("data.users[0].roles[0]") as Result.Ok).value)
+    }
+
+    @Test
+    fun `exists returns true for existing path`() {
+        val json = """{"user":{"name":"Alice"}}"""
+        val node = (safeParseJson(json) as Result.Ok).value
+        assertTrue(node.exists("user.name"))
+    }
+
+    @Test
+    fun `exists returns false for missing path`() {
+        val json = """{"user":{"name":"Alice"}}"""
+        val node = (safeParseJson(json) as Result.Ok).value
+        assertFalse(node.exists("user.email"))
+    }
+
+    @Test
+    fun `array returns list of JsonNodes`() {
+        val json = """{"items":[1,2,3]}"""
+        val node = (safeParseJson(json) as Result.Ok).value
+        val result = node.array("items")
+        assertTrue(result is Result.Ok)
+        assertEquals(3, (result as Result.Ok).value.size)
+    }
+
+    @Test
+    fun `array returns error for non-array`() {
+        val json = """{"name":"Alice"}"""
+        val node = (safeParseJson(json) as Result.Ok).value
+        val result = node.array("name")
+        assertTrue(result is Result.Err)
+    }
+
+    @Test
+    fun `keys returns object keys`() {
+        val json = """{"user":{"name":"Alice","age":30,"active":true}}"""
+        val node = (safeParseJson(json) as Result.Ok).value
+        val result = node.keys("user")
+        assertTrue(result is Result.Ok)
+        val keys = (result as Result.Ok).value
+        assertEquals(setOf("name", "age", "active"), keys)
+    }
+
+    @Test
+    fun `keys returns error for non-object`() {
+        val json = """{"items":[1,2,3]}"""
+        val node = (safeParseJson(json) as Result.Ok).value
+        val result = node.keys("items")
+        assertTrue(result is Result.Err)
+    }
+
+    @Test
+    fun `size returns array length`() {
+        val json = """{"items":[1,2,3,4,5]}"""
+        val node = (safeParseJson(json) as Result.Ok).value
+        val result = node.size("items")
+        assertTrue(result is Result.Ok)
+        assertEquals(5, (result as Result.Ok).value)
+    }
+
+    @Test
+    fun `size returns object key count`() {
+        val json = """{"user":{"name":"Alice","age":30}}"""
+        val node = (safeParseJson(json) as Result.Ok).value
+        val result = node.size("user")
+        assertTrue(result is Result.Ok)
+        assertEquals(2, (result as Result.Ok).value)
+    }
+
+    @Test
+    fun `size returns error for primitives`() {
+        val json = """{"name":"Alice"}"""
+        val node = (safeParseJson(json) as Result.Ok).value
+        val result = node.size("name")
+        assertTrue(result is Result.Err)
+    }
+
+    @Test
+    fun `exists works with array paths`() {
+        val json = """{"users":[{"name":"Alice"},{"name":"Bob"}]}"""
+        val node = (safeParseJson(json) as Result.Ok).value
+        assertTrue(node.exists("users[0].name"))
+        assertTrue(node.exists("users[1].name"))
+        assertFalse(node.exists("users[2].name"))
     }
 }
